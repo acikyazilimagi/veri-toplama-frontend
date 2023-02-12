@@ -51,7 +51,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
   const [location, setLocation] = useState(locations[0]);
-  const [time, setTime] = useState(times[0]);
+  const [time, setTime] = useState(times[1]);
   const [type, setType] = useState(types[0]);
   const [query, setQuery] = useState("");
   const [adress, setAdress] = useState(null);
