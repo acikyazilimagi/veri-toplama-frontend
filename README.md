@@ -1,2 +1,1 @@
-# veri-toplama-frontend
-veri-toplama-frontend
+# deprem-adres-kontrolleri
