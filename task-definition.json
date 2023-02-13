@@ -38,7 +38,7 @@
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "veritoplama_ui",
+      "image": "366354050833.dkr.ecr.eu-central-1.amazonaws.com/base-ecr:2d8ff13c00322ee482df66299740aa6783653fbc",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -84,7 +84,19 @@
       "targetId": null,
       "targetType": null,
       "value": null,
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.execution-role-ecr-pull"
     },
     {
       "targetId": null,
