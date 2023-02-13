@@ -9,7 +9,7 @@
         "logDriver": "awslogs",
         "secretOptions": null,
         "options": {
-          "awslogs-group": "/ecs/veritoplama_ui",
+          "awslogs-group": "/ecs/ veritoplama_ui",
           "awslogs-region": "eu-central-1",
           "awslogs-create-group": "true",
           "awslogs-stream-prefix": "ecs"
@@ -38,7 +38,7 @@
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "veri-toplama-ui",
+      "image": " veritoplama_ui",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -65,8 +65,8 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:366354050833:task-definition/veritoplama_ui-TD:1",
-  "family": "veritoplama_ui-TD",
+  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:366354050833:task-definition/ veritoplama_ui-TD:1",
+  "family": " veritoplama_ui-TD",
   "requiresAttributes": [
     {
       "targetId": null,
@@ -84,19 +84,7 @@
       "targetId": null,
       "targetType": null,
       "value": null,
-      "name": "com.amazonaws.ecs.capability.ecr-auth"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "ecs.capability.execution-role-ecr-pull"
     },
     {
       "targetId": null,
