@@ -1,0 +1,23 @@
+{
+    "containerDefinitions": [
+      {
+        "essential": true,
+        "name": "app",
+        "portMappings": [
+          {
+            "containerPort": 3000,
+            "hostPort": 80,
+            "protocol": "tcp"
+          }
+        ]
+      }
+    ],
+    "cpu": "256",
+    "family": "fargate-task-definition",
+    "memory": "512",
+    "networkMode": "awsvpc",
+    "runtimePlatform": {
+      "operatingSystemFamily": "LINUX"
+    },
+    "requiresCompatibilities": ["FARGATE"]
+  }
