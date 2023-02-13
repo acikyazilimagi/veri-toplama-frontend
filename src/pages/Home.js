@@ -26,14 +26,12 @@ const locations = [
 
 const reasons = [
   "Seçiniz",
-  "Hata Yok",
-  "İşaretleme Hatası",
-  "Duplicate",
-  "Adres Yok",
-  "Kaynak Yok",
-  "Yardım Talebi",
-  "Kurtarıldı",
+  "Enkaz Yanlış Pin",
+  "Enkaz Dışı Yardımlar",
   "Hatalı ya da Spam",
+  "Hata Yok",
+  "Duplicate",
+  "Kurtarıldı",
 ];
 
 const types = ["Depremzede", "Enkaz Yardım"];
@@ -51,7 +49,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
   const [location, setLocation] = useState(locations[0]);
-  const [time, setTime] = useState(times[1]);
+  const [time, setTime] = useState(times[0]);
   const [type, setType] = useState(types[0]);
   const [query, setQuery] = useState("");
   const [adress, setAdress] = useState(null);
@@ -234,8 +232,8 @@ const Home = () => {
               >
                 <Menu.Items className="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-lg bg-zinc-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
-                    {times.map((_) => (
-                      <Menu.Item>
+                    {times.map((_, index) => (
+                      <Menu.Item key={index}>
                         {({ active }) => (
                           <div
                             onClick={() => {
@@ -404,69 +402,48 @@ const Home = () => {
               placeholder="Apartman"
               onChange={(event) => setForm({ apartman: event.target.value })}
             />
+            <Menu as="div" className="relative inline-block text-left h-10">
+              <Menu.Button className="inline-flex w-full justify-between rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                <span>{reason}</span>
 
-            <Combobox as="div" value={reason} onChange={setReason}>
-              <div className="relative">
-                <Combobox.Input
-                  className="w-full rounded-lg border border-zinc-700 bg-zinc-900 placeholder:text-zinc-500 py-2 pl-3 pr-10 shadow-sm text-zinc-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                  onChange={(event) => setQuery(event.target.value)}
-                  displayValue={(locate) => locate}
+                <ChevronDownIcon
+                  className="-mr-1 ml-2 h-5 w-5"
+                  aria-hidden="true"
                 />
+              </Menu.Button>
 
-                <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-lg px-2 focus:outline-none">
-                  <ChevronDownIcon
-                    className="h-5 w-5 text-zinc-500"
-                    aria-hidden="true"
-                  />
-                </Combobox.Button>
-
-                {reasons.length > 0 && (
-                  <Combobox.Options className="absolute z-10 mt-1 w-full overflow-auto rounded-lg bg-zinc-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {reasons.map((locate, index) => (
-                      <Combobox.Option
-                        key={index}
-                        value={locate}
-                        className={({ active }) =>
-                          classNames(
-                            "relative cursor-pointer select-none py-2 pl-3 pr-9 transition-colors hover:bg-zinc-700 transition-colors",
-                            active ? "bg-zinc-800 text-white" : "text-zinc-100"
-                          )
-                        }
-                      >
-                        {({ active, selected }) => (
-                          <>
-                            <div className="flex items-center">
-                              <span
-                                className={classNames(
-                                  "ml-3 truncate dark:text-zinc-100",
-                                  selected && "font-semibold"
-                                )}
-                              >
-                                {locate}
-                              </span>
-                            </div>
-
-                            {selected && (
-                              <span
-                                className={classNames(
-                                  "absolute inset-y-0 right-0 flex items-center pr-2",
-                                  active ? "text-white" : "text-brand"
-                                )}
-                              >
-                                <CheckIcon
-                                  className="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </span>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-lg bg-zinc-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    {reasons.map((_, index) => (
+                      <Menu.Item key={index}>
+                        {({ active }) => (
+                          <div
+                            onClick={() => {
+                              setReason(_);
+                            }}
+                            className={classNames(
+                              active ? "bg-zinc-700" : "text-zinc-100",
+                              "block px-4 py-2 text-sm cursor-pointer transition-colors"
                             )}
-                          </>
+                          >
+                            {_}
+                          </div>
                         )}
-                      </Combobox.Option>
+                      </Menu.Item>
                     ))}
-                  </Combobox.Options>
-                )}
-              </div>
-            </Combobox>
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
 
             {reasonError && (
               <p className="text-red-400 text-left">Bir sebep seçmelisiniz.</p>
@@ -484,6 +461,7 @@ const Home = () => {
               <a
                 href={form.location ? form.location : adress.original_location}
                 target="_blank"
+                rel="noreferrer"
                 className="h-10 w-10 border border-zinc-700 rounded-lg shadow cursor-pointer hover:opacity-80 bg-zinc-800 hover:bg-zinc-700 transition-colors inline-flex items-center justify-center"
               >
                 <svg
@@ -691,6 +669,7 @@ const Home = () => {
               <a
                 href={form.location ? form.location : adress.original_address}
                 target="_blank"
+                rel="noreferrer"
                 className="h-10 w-10 border border-zinc-700 rounded-lg shadow cursor-pointer hover:opacity-80 bg-zinc-800 hover:bg-zinc-700 transition-colors inline-flex items-center justify-center"
               >
                 <svg

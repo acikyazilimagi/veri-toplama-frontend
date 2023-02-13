@@ -165,6 +165,7 @@ const Verify = () => {
                         <a
                           href={entry.original_address}
                           target="_blank"
+                          rel="noreferrer"
                           className="underline"
                         >
                           Konuma Git
@@ -174,6 +175,7 @@ const Verify = () => {
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-6 w-">
                         {entry.corrected_address && (
                           <a
+                            rel="noreferrer"
                             href={entry.original_address}
                             target="_blank"
                             className="underline"
