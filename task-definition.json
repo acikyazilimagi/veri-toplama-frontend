@@ -66,7 +66,7 @@
     "FARGATE"
   ],
   "taskDefinitionArn": "arn:aws:ecs:eu-central-1:366354050833:task-definition/ veri-toplama-ui-service-TD:1",
-  "family": " veri-toplama-ui-service-TD",
+  "family": " veri-toplama-ui-service",
   "requiresAttributes": [
     {
       "targetId": null,
