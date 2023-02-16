@@ -3,10 +3,7 @@ import axios from "axios";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Combobox, Menu, Transition } from "@headlessui/react";
 import { useSearchParams } from "react-router-dom";
-import {
-  ArrowDownOnSquareIcon,
-  ArrowLeftIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 const times = ["Tümü", "3 saat", "6 saat", "12 saat", "1 gün"];
 
@@ -347,16 +344,16 @@ const Home = () => {
                 type: types.findIndex((_) => _ === type),
                 tweet_contents: adress.original_message,
               };
-
-              axios
-                .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
-                  headers: {
-                    "Auth-Key": form.token,
-                  },
-                })
-                .finally(() => {
-                  getAdress();
-                });
+              console.log(data);
+              // axios
+              //   .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
+              //     headers: {
+              //       "Auth-Key": form.token,
+              //     },
+              //   })
+              //   .finally(() => {
+              //     getAdress();
+              //   });
             }}
             className="mt-4 flex flex-col gap-y-4 mx-auto max-w-2xl"
           >
@@ -487,6 +484,8 @@ const Home = () => {
                 placeholder="Orijinal Lokasyon"
                 onChange={(event) => setForm({ location: event.target.value })}
                 defaultValue={adress.original_location}
+                pattern="^https:\/\/(goo.gl\/maps|maps.google.com)\S+"
+                title="https://goo.gl/maps veya https://maps.google.com ile başlamalıdır."
               />
             </div>
 
@@ -533,16 +532,16 @@ const Home = () => {
                 type: types.findIndex((_) => _ === type),
                 tweet_contents: adress.original_message,
               };
-
-              axios
-                .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
-                  headers: {
-                    "Auth-Key": form.token,
-                  },
-                })
-                .finally(() => {
-                  window.location.href = "/dogrula";
-                });
+              console.log(data);
+              // axios
+              //   .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
+              //     headers: {
+              //       "Auth-Key": form.token,
+              //     },
+              //   })
+              //   .finally(() => {
+              //     window.location.href = "/dogrula";
+              //   });
             }}
             className="mt-8 flex flex-col gap-y-4 mx-auto max-w-2xl"
           >
@@ -590,68 +589,48 @@ const Home = () => {
               onChange={(event) => setForm({ apartman: event.target.value })}
             />
 
-            <Combobox as="div" value={reason} onChange={setReason}>
-              <div className="relative">
-                <Combobox.Input
-                  className="w-full rounded-lg border border-zinc-700 bg-zinc-900 placeholder:text-zinc-500 py-2 pl-3 pr-10 shadow-sm text-zinc-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                  onChange={(event) => setQuery(event.target.value)}
-                  displayValue={(locate) => locate}
+            <Menu as="div" className="relative inline-block text-left h-10">
+              <Menu.Button className="inline-flex w-full justify-between rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                <span>{reason}</span>
+
+                <ChevronDownIcon
+                  className="-mr-1 ml-2 h-5 w-5"
+                  aria-hidden="true"
                 />
+              </Menu.Button>
 
-                <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-lg px-2 focus:outline-none">
-                  <ChevronDownIcon
-                    className="h-5 w-5 text-zinc-500"
-                    aria-hidden="true"
-                  />
-                </Combobox.Button>
-
-                {reasons.length > 0 && (
-                  <Combobox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-lg bg-zinc-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {reasons.map((locate, index) => (
-                      <Combobox.Option
-                        key={index}
-                        value={locate}
-                        className={({ active }) =>
-                          classNames(
-                            "relative cursor-default select-none py-2 pl-3 pr-9 transition-colors",
-                            active ? "bg-zinc-800 text-white" : "text-zinc-100"
-                          )
-                        }
-                      >
-                        {({ active, selected }) => (
-                          <>
-                            <div className="flex items-center">
-                              <span
-                                className={classNames(
-                                  "ml-3 truncate dark:text-zinc-100",
-                                  selected && "font-semibold"
-                                )}
-                              >
-                                {locate}
-                              </span>
-                            </div>
-
-                            {selected && (
-                              <span
-                                className={classNames(
-                                  "absolute inset-y-0 right-0 flex items-center pr-2",
-                                  active ? "text-white" : "text-brand"
-                                )}
-                              >
-                                <CheckIcon
-                                  className="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </span>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-lg bg-zinc-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    {reasons.map((_, index) => (
+                      <Menu.Item key={index}>
+                        {({ active }) => (
+                          <div
+                            onClick={() => {
+                              setReason(_);
+                            }}
+                            className={classNames(
+                              active ? "bg-zinc-700" : "text-zinc-100",
+                              "block px-4 py-2 text-sm cursor-pointer transition-colors"
                             )}
-                          </>
+                          >
+                            {_}
+                          </div>
                         )}
-                      </Combobox.Option>
+                      </Menu.Item>
                     ))}
-                  </Combobox.Options>
-                )}
-              </div>
-            </Combobox>
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </Menu>
 
             {reasonError && (
               <p className="text-red-400 text-left">Bir sebep seçmelisiniz.</p>
@@ -692,6 +671,8 @@ const Home = () => {
                 required={reason !== reasons[0]}
                 className="flex-1 rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
                 type="text"
+                pattern="^https:\/\/(goo.gl\/maps|maps.google.com)\S+"
+                title="https://goo.gl/maps veya https://maps.google.com ile başlamalıdır."
                 placeholder="Orijinal Lokasyon"
                 onChange={(event) => setForm({ location: event.target.value })}
                 defaultValue={
