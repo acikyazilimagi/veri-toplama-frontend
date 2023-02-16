@@ -345,15 +345,15 @@ const Home = () => {
                 tweet_contents: adress.original_message,
               };
               console.log(data);
-              // axios
-              //   .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
-              //     headers: {
-              //       "Auth-Key": form.token,
-              //     },
-              //   })
-              //   .finally(() => {
-              //     getAdress();
-              //   });
+              axios
+                .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
+                  headers: {
+                    "Auth-Key": form.token,
+                  },
+                })
+                .finally(() => {
+                  getAdress();
+                });
             }}
             className="mt-4 flex flex-col gap-y-4 mx-auto max-w-2xl"
           >
@@ -533,15 +533,15 @@ const Home = () => {
                 tweet_contents: adress.original_message,
               };
               console.log(data);
-              // axios
-              //   .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
-              //     headers: {
-              //       "Auth-Key": form.token,
-              //     },
-              //   })
-              //   .finally(() => {
-              //     window.location.href = "/dogrula";
-              //   });
+              axios
+                .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
+                  headers: {
+                    "Auth-Key": form.token,
+                  },
+                })
+                .finally(() => {
+                  window.location.href = "/dogrula";
+                });
             }}
             className="mt-8 flex flex-col gap-y-4 mx-auto max-w-2xl"
           >
