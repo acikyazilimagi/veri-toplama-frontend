@@ -1,6 +1,7 @@
 FROM node:16-alpine as builder
 
-ENV REACT_APP_API_URL=https://veri-toplama-api.afetharita.com
+ARG API_URL
+ENV REACT_APP_API_URL=${API_URL}
 
 WORKDIR /app
 
