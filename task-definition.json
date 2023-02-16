@@ -25,7 +25,7 @@
       ],
       "command": null,
       "linuxParameters": null,
-      "cpu": 2048,
+      "cpu": 512,
       "environment": [],
       "resourceRequirements": null,
       "ulimits": null,
@@ -34,7 +34,7 @@
       "workingDirectory": null,
       "secrets": null,
       "dockerSecurityOptions": null,
-      "memory": 4096,
+      "memory": 1024,
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
@@ -59,61 +59,17 @@
     }
   ],
   "placementConstraints": [],
-  "memory": "4096",
+  "memory": "1024",
   "taskRoleArn": null,
   "compatibilities": [
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:366354050833:task-definition/veri-toplama-ui-service-TD:1",
   "family": "veri-toplama-ui-service",
-  "requiresAttributes": [
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "ecs.capability.execution-role-awslogs"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "ecs.capability.task-eni"
-    },
-    {
-      "targetId": null,
-      "targetType": null,
-      "value": null,
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
-    }
-  ],
   "pidMode": null,
-  "requiresCompatibilities": [
-    "FARGATE"
-  ],
   "networkMode": "awsvpc",
   "runtimePlatform": null,
-  "cpu": "2048",
-  "revision": 1,
-  "status": "ACTIVE",
+  "cpu": "512",
   "inferenceAccelerators": null,
   "proxyConfiguration": null,
   "volumes": []
