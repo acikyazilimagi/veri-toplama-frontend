@@ -9,7 +9,7 @@
         "logDriver": "awslogs",
         "secretOptions": null,
         "options": {
-          "awslogs-group": "/ecs/ veri-toplama-ui-service",
+          "awslogs-group": "/ecs/veri-toplama-ui-service",
           "awslogs-region": "eu-central-1",
           "awslogs-create-group": "true",
           "awslogs-stream-prefix": "ecs"
@@ -38,7 +38,7 @@
       "memoryReservation": null,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": " veri-toplama-ui-service",
+      "image": "veri-toplama-ui-service",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -65,8 +65,8 @@
     "EC2",
     "FARGATE"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:366354050833:task-definition/ veri-toplama-ui-service-TD:1",
-  "family": " veri-toplama-ui-service",
+  "taskDefinitionArn": "arn:aws:ecs:eu-central-1:366354050833:task-definition/veri-toplama-ui-service-TD:1",
+  "family": "veri-toplama-ui-service",
   "requiresAttributes": [
     {
       "targetId": null,
