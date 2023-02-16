@@ -1,11 +1,7 @@
 import Login from "./Login";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  ChevronDownIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "@heroicons/react/20/solid";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { chunk } from "lodash";
 import { PencilIcon } from "@heroicons/react/24/outline";
 
@@ -38,7 +34,7 @@ const Verify = () => {
     } else {
       setLoggedIn(false);
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     setPage(0);
