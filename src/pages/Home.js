@@ -5,7 +5,7 @@ import { Combobox, Menu, Transition } from "@headlessui/react";
 import { useSearchParams } from "react-router-dom";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
-const times = ["Tümü", "3 saat", "6 saat", "12 saat", "1 gün"];
+const times = ["Tümü"];
 
 const locations = [
   "Tümü",
@@ -59,8 +59,6 @@ const Home = () => {
     {
       message: "",
       location: "",
-      open_address: "",
-      apartment: "",
       reason: "",
       token: "",
     }
@@ -81,18 +79,6 @@ const Home = () => {
       case "Tümü":
       default:
         startingAt = 0;
-        break;
-      case "3 saat":
-        startingAt = startingAt - 3 * 3600;
-        break;
-      case "6 saat":
-        startingAt = startingAt - 6 * 3600;
-        break;
-      case "12 saat":
-        startingAt = startingAt - 12 * 3600;
-        break;
-      case "1 gün":
-        startingAt = startingAt - 86400;
         break;
     }
 
@@ -134,8 +120,6 @@ const Home = () => {
         setForm({
           message: "",
           location: "",
-          open_address: "",
-          apartment: "",
           reason: "",
         });
 
@@ -207,49 +191,7 @@ const Home = () => {
         )}
 
         {!id && (
-          <div className="mt-8 max-w-2xl mx-auto grid grid-cols-2 gap-x-4">
-            <Menu as="div" className="relative inline-block text-left h-10">
-              <Menu.Button className="inline-flex w-full justify-between rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                <span>{time}</span>
-
-                <ChevronDownIcon
-                  className="-mr-1 ml-2 h-5 w-5"
-                  aria-hidden="true"
-                />
-              </Menu.Button>
-
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items className="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-lg bg-zinc-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
-                    {times.map((_, index) => (
-                      <Menu.Item key={index}>
-                        {({ active }) => (
-                          <div
-                            onClick={() => {
-                              setTime(_);
-                            }}
-                            className={classNames(
-                              active ? "bg-zinc-700" : "text-zinc-100",
-                              "block px-4 py-2 text-sm cursor-pointer transition-colors"
-                            )}
-                          >
-                            {_}
-                          </div>
-                        )}
-                      </Menu.Item>
-                    ))}
-                  </div>
-                </Menu.Items>
-              </Transition>
-            </Menu>
+          <div className="mt-4 flex flex-col gap-y-4 mx-auto max-w-2xl">
 
             <Combobox as="div" value={location} onChange={setLocation}>
               <div className="relative">
@@ -338,8 +280,6 @@ const Home = () => {
               let data = {
                 id: address.entry_id,
                 new_address: form.location ? form.location : address.original_location,
-                open_address: form.open_address,
-                apartment: form.apartment,
                 reason: reason,
                 type: types.findIndex((_) => _ === type),
                 tweet_contents: address.original_message,
@@ -385,20 +325,6 @@ const Home = () => {
                 defaultValue={address.loc[1]}
               />
             </div>
-
-            <input
-              className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
-              type="text"
-              placeholder="Açık Adres"
-              onChange={(event) => setForm({ open_address: event.target.value })}
-            />
-
-            <input
-              className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
-              type="text"
-              placeholder="Apartman"
-              onChange={(event) => setForm({ apartment: event.target.value })}
-            />
             <Menu as="div" className="relative inline-block text-left h-10">
               <Menu.Button className="inline-flex w-full justify-between rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                 <span>{reason}</span>
@@ -526,8 +452,6 @@ const Home = () => {
               let data = {
                 id: address.entry_id,
                 new_address: form.location ? form.location : address.original_location,
-                open_address: form.open_address,
-                apartment: form.apartment,
                 reason: reason,
                 type: types.findIndex((_) => _ === type),
                 tweet_contents: address.original_message,
@@ -571,23 +495,6 @@ const Home = () => {
                 defaultValue={address.location[1]}
               />
             </div>
-
-            <input
-              required={reason !== reasons[0]}
-              className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
-              type="text"
-              placeholder="Açık Adres"
-              defaultValue={address.open_address}
-              onChange={(event) => setForm({ open_address: event.target.value })}
-            />
-
-            <input
-              className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
-              type="text"
-              placeholder="Apartman"
-              defaultValue={address.apartment}
-              onChange={(event) => setForm({ apartment: event.target.value })}
-            />
 
             <Menu as="div" className="relative inline-block text-left h-10">
               <Menu.Button className="inline-flex w-full justify-between rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
