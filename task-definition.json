@@ -26,7 +26,12 @@
       "command": null,
       "linuxParameters": null,
       "cpu": 512,
-      "environment": [],
+      "environment": [
+        {
+          "name": "REACT_APP_API_URL",
+          "value": "https://veri-toplama-api.afetharita.com"
+        }
+      ],
       "resourceRequirements": null,
       "ulimits": null,
       "dnsServers": null,
