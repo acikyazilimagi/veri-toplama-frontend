@@ -1,55 +1,55 @@
-import { Fragment, useEffect, useReducer, useState } from "react";
-import axios from "axios";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
-import { Combobox, Menu, Transition } from "@headlessui/react";
-import { useSearchParams } from "react-router-dom";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-
-const times = ["Tümü", "3 saat", "6 saat", "12 saat", "1 gün"];
+import { Fragment, useEffect, useReducer, useState } from 'react';
+import axios from 'axios';
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
+import { Combobox, Menu, Transition } from '@headlessui/react';
+import { useSearchParams } from 'react-router-dom';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { Map } from './Map';
+const times = ['Tümü', '3 saat', '6 saat', '12 saat', '1 gün'];
 
 const locations = [
-  "Tümü",
-  "Hatay - Batı Kuzey",
-  "Hatay - Batı Güney",
-  "Hatay - Doğu",
-  "Hatay - Kırıkhan",
-  "Hatay - İskenderun",
-  "Hatay - Samandağ",
-  "Kahramanmaraş",
-  "Gaziantep",
-  "Malatya",
-  "Adıyaman",
+  'Tümü',
+  'Hatay - Batı Kuzey',
+  'Hatay - Batı Güney',
+  'Hatay - Doğu',
+  'Hatay - Kırıkhan',
+  'Hatay - İskenderun',
+  'Hatay - Samandağ',
+  'Kahramanmaraş',
+  'Gaziantep',
+  'Malatya',
+  'Adıyaman',
 ];
 
 const reasons = [
-  "Seçiniz",
-  "Enkaz Yanlış Pin",
-  "Enkaz Dışı Yardımlar",
-  "Hatalı ya da Spam",
-  "Hata Yok",
-  "Duplicate",
-  "Kurtarıldı",
+  'Seçiniz',
+  'Enkaz Yanlış Pin',
+  'Enkaz Dışı Yardımlar',
+  'Hatalı ya da Spam',
+  'Hata Yok',
+  'Duplicate',
+  'Kurtarıldı',
 ];
 
-const types = ["Depremzede", "Enkaz Yardım"];
+const types = ['Depremzede', 'Enkaz Yardım'];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 }
 
 const Home = () => {
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
-  const token = searchParams.get("token");
-  const id = searchParams.get("id");
+  const token = searchParams.get('token');
+  const id = searchParams.get('id');
 
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
   const [location, setLocation] = useState(locations[0]);
   const [time, setTime] = useState(times[0]);
   const [type, setType] = useState(types[0]);
-  const [query, setQuery] = useState("");
-  const [adress, setAdress] = useState(null);
+  const [query, setQuery] = useState('');
+  const [address, setAddress] = useState(null);
   const [reasonError, setReasonError] = useState(false);
   const [reason, setReason] = useState(reasons[0]);
   const [form, setForm] = useReducer(
@@ -57,41 +57,41 @@ const Home = () => {
       return { ...prev, ...next };
     },
     {
-      message: "",
-      location: "",
-      open_adress: "",
-      apartman: "",
-      reason: "",
-      token: "",
+      message: '',
+      location: '',
+      open_adress: '',
+      apartman: '',
+      reason: '',
+      token: '',
     }
   );
   const filteredLocations =
-    query === ""
+    query === ''
       ? locations
       : locations.filter((locate) => {
           return locate.toLowerCase().includes(query.toLowerCase());
         });
 
-  const getAdress = () => {
+  const getAddress = () => {
     setLoading(true);
 
     let startingAt = Math.floor(Date.now() / 1000);
 
     switch (time) {
-      case "Tümü":
+      case 'Tümü':
       default:
         startingAt = 0;
         break;
-      case "3 saat":
+      case '3 saat':
         startingAt = startingAt - 3 * 3600;
         break;
-      case "6 saat":
+      case '6 saat':
         startingAt = startingAt - 6 * 3600;
         break;
-      case "12 saat":
+      case '12 saat':
         startingAt = startingAt - 12 * 3600;
         break;
-      case "1 gün":
+      case '1 gün':
         startingAt = startingAt - 86400;
         break;
     }
@@ -107,7 +107,7 @@ const Home = () => {
         }`,
         {
           headers: {
-            "Auth-Key": token,
+            'Auth-Key': token,
           },
         }
       )
@@ -115,7 +115,7 @@ const Home = () => {
         let data = response.data;
 
         if (id) {
-          setAdress(data);
+          setAddress(data);
 
           if (reasons.includes(data.reason)) {
             setReason(data.reason);
@@ -123,7 +123,7 @@ const Home = () => {
         } else {
           setCount(data.count);
 
-          setAdress(data.location);
+          setAddress(data.location);
         }
       })
       .finally(() => {
@@ -132,11 +132,11 @@ const Home = () => {
         setReason(reasons[0]);
 
         setForm({
-          message: "",
-          location: "",
-          open_adress: "",
-          apartman: "",
-          reason: "",
+          message: '',
+          location: '',
+          open_adress: '',
+          apartman: '',
+          reason: '',
         });
 
         setLoading(false);
@@ -144,14 +144,14 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getAdress();
+    getAddress();
   }, [location, time]);
 
   return (
     <div className="min-h-full bg-zinc-900 text-zinc-100">
       <div
         className={`absolute z-10 h-full bg-zinc-900/60 w-full flex items-center justify-center transition-all ${
-          loading ? "opacity-100 visible" : "opacity-0 invisible"
+          loading ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
       >
         <svg
@@ -196,11 +196,11 @@ const Home = () => {
           </p>
         )}
 
-        {loading && !adress && id && (
+        {loading && !address && id && (
           <p className="mt-8 text-yellow-400">Adres bilgileri getiriliyor...</p>
         )}
 
-        {loading && !adress && !id && (
+        {loading && !address && !id && (
           <p className="mt-8 text-green-400">
             Filtreye uygun adres aranıyor...
           </p>
@@ -237,8 +237,8 @@ const Home = () => {
                               setTime(_);
                             }}
                             className={classNames(
-                              active ? "bg-zinc-700" : "text-zinc-100",
-                              "block px-4 py-2 text-sm cursor-pointer transition-colors"
+                              active ? 'bg-zinc-700' : 'text-zinc-100',
+                              'block px-4 py-2 text-sm cursor-pointer transition-colors'
                             )}
                           >
                             {_}
@@ -274,8 +274,8 @@ const Home = () => {
                         value={locate}
                         className={({ active }) =>
                           classNames(
-                            "relative cursor-default select-none py-2 pl-3 pr-9 transition-colors",
-                            active ? "bg-zinc-800 text-white" : "text-zinc-100"
+                            'relative cursor-default select-none py-2 pl-3 pr-9 transition-colors',
+                            active ? 'bg-zinc-800 text-white' : 'text-zinc-100'
                           )
                         }
                       >
@@ -284,8 +284,8 @@ const Home = () => {
                             <div className="flex items-center">
                               <span
                                 className={classNames(
-                                  "ml-3 truncate dark:text-zinc-100",
-                                  selected && "font-semibold"
+                                  'ml-3 truncate dark:text-zinc-100',
+                                  selected && 'font-semibold'
                                 )}
                               >
                                 {locate}
@@ -295,8 +295,8 @@ const Home = () => {
                             {selected && (
                               <span
                                 className={classNames(
-                                  "absolute inset-y-0 right-0 flex items-center pr-2",
-                                  active ? "text-white" : "text-brand"
+                                  'absolute inset-y-0 right-0 flex items-center pr-2',
+                                  active ? 'text-white' : 'text-brand'
                                 )}
                               >
                                 <CheckIcon
@@ -316,13 +316,13 @@ const Home = () => {
           </div>
         )}
 
-        {!loading && !adress && (
+        {!loading && !address && (
           <p className="mt-8 text-red-400">Adres bulunamadı.</p>
         )}
 
-        {adress && !id && (
+        {address && !id && (
           <form
-            key={adress.entry_id}
+            key={address.entry_id}
             onSubmit={(event) => {
               event.preventDefault();
 
@@ -336,23 +336,25 @@ const Home = () => {
               setLoading(true);
 
               let data = {
-                id: adress.entry_id,
-                new_address: form.location,
-                open_address: form.open_adress,
-                apartment: form.apartman,
+                id: address.entry_id,
+                new_address: form.location
+                  ? form.location
+                  : address.original_location,
+                open_address: form.open_address,
+                apartment: form.apartment,
                 reason: reason,
                 type: types.findIndex((_) => _ === type),
-                tweet_contents: adress.original_message,
+                tweet_contents: address.original_message,
               };
               console.log(data);
               axios
                 .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
                   headers: {
-                    "Auth-Key": form.token,
+                    'Auth-Key': form.token,
                   },
                 })
                 .finally(() => {
-                  getAdress();
+                  getAddress();
                 });
             }}
             className="mt-4 flex flex-col gap-y-4 mx-auto max-w-2xl"
@@ -363,7 +365,7 @@ const Home = () => {
               type="text"
               placeholder="ID"
               onChange={(event) => setForm({ id: event.target.value })}
-              defaultValue={adress.entry_id}
+              defaultValue={address.entry_id}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -373,7 +375,7 @@ const Home = () => {
                 type="text"
                 placeholder="Enlem"
                 onChange={(event) => setForm({ lat: event.target.value })}
-                defaultValue={adress.loc[0]}
+                defaultValue={address.loc[0]}
               />
 
               <input
@@ -382,7 +384,7 @@ const Home = () => {
                 type="text"
                 placeholder="Boylam"
                 onChange={(event) => setForm({ lng: event.target.value })}
-                defaultValue={adress.loc[1]}
+                defaultValue={address.loc[1]}
               />
             </div>
 
@@ -390,14 +392,16 @@ const Home = () => {
               className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
               type="text"
               placeholder="Açık Adres"
-              onChange={(event) => setForm({ open_adress: event.target.value })}
+              onChange={(event) =>
+                setForm({ open_address: event.target.value })
+              }
             />
 
             <input
               className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
               type="text"
               placeholder="Apartman"
-              onChange={(event) => setForm({ apartman: event.target.value })}
+              onChange={(event) => setForm({ apartment: event.target.value })}
             />
             <Menu as="div" className="relative inline-block text-left h-10">
               <Menu.Button className="inline-flex w-full justify-between rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
@@ -428,8 +432,8 @@ const Home = () => {
                               setReason(_);
                             }}
                             className={classNames(
-                              active ? "bg-zinc-700" : "text-zinc-100",
-                              "block px-4 py-2 text-sm cursor-pointer transition-colors"
+                              active ? 'bg-zinc-700' : 'text-zinc-100',
+                              'block px-4 py-2 text-sm cursor-pointer transition-colors'
                             )}
                           >
                             {_}
@@ -451,12 +455,12 @@ const Home = () => {
               disabled={true}
               placeholder="Orijinal Mesaj"
               onChange={(event) => setForm({ message: event.target.value })}
-              defaultValue={adress.original_message}
+              defaultValue={address.original_message}
             />
 
             <div className="flex items-center gap-x-4">
               <a
-                href={form.location ? form.location : adress.original_location}
+                href={form.location ? form.location : address.original_location}
                 target="_blank"
                 rel="noreferrer"
                 className="h-10 w-10 border border-zinc-700 rounded-lg shadow cursor-pointer hover:opacity-80 bg-zinc-800 hover:bg-zinc-700 transition-colors inline-flex items-center justify-center"
@@ -483,8 +487,8 @@ const Home = () => {
                 type="text"
                 placeholder="Orijinal Lokasyon"
                 onChange={(event) => setForm({ location: event.target.value })}
-                defaultValue={adress.original_location}
-                pattern="^https:\/\/(goo.gl\/maps|maps.google.com)\S+"
+                defaultValue={address.original_location}
+                pattern="^https:\/\/(goo.gl\/maps|maps.google.com|www\.google\.com\/maps)\S+"
                 title="https://goo.gl/maps veya https://maps.google.com ile başlamalıdır."
               />
             </div>
@@ -508,9 +512,9 @@ const Home = () => {
           </form>
         )}
 
-        {adress && id && (
+        {address && id && (
           <form
-            key={adress.entry_id}
+            key={address.entry_id}
             onSubmit={(event) => {
               event.preventDefault();
 
@@ -524,23 +528,25 @@ const Home = () => {
               setLoading(true);
 
               let data = {
-                id: adress.entry_id,
-                new_address: form.location,
-                open_address: form.open_adress,
-                apartment: form.apartman,
+                id: address.entry_id,
+                new_address: form.location
+                  ? form.location
+                  : address.original_location,
+                open_address: form.open_address,
+                apartment: form.apartment,
                 reason: reason,
                 type: types.findIndex((_) => _ === type),
-                tweet_contents: adress.original_message,
+                tweet_contents: address.original_message,
               };
               console.log(data);
               axios
                 .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
                   headers: {
-                    "Auth-Key": form.token,
+                    'Auth-Key': form.token,
                   },
                 })
                 .finally(() => {
-                  window.location.href = "/dogrula";
+                  window.location.href = '/dogrula';
                 });
             }}
             className="mt-8 flex flex-col gap-y-4 mx-auto max-w-2xl"
@@ -551,7 +557,7 @@ const Home = () => {
               type="text"
               placeholder="ID"
               onChange={(event) => setForm({ id: event.target.value })}
-              defaultValue={adress.entry_id}
+              defaultValue={address.entry_id}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -560,7 +566,7 @@ const Home = () => {
                 type="text"
                 placeholder="Enlem"
                 onChange={(event) => setForm({ lat: event.target.value })}
-                defaultValue={adress.location[0]}
+                defaultValue={address.location[0]}
               />
 
               <input
@@ -568,7 +574,7 @@ const Home = () => {
                 type="text"
                 placeholder="Boylam"
                 onChange={(event) => setForm({ lng: event.target.value })}
-                defaultValue={adress.location[1]}
+                defaultValue={address.location[1]}
               />
             </div>
 
@@ -577,16 +583,18 @@ const Home = () => {
               className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
               type="text"
               placeholder="Açık Adres"
-              defaultValue={adress.open_address}
-              onChange={(event) => setForm({ open_adress: event.target.value })}
+              defaultValue={address.open_address}
+              onChange={(event) =>
+                setForm({ open_address: event.target.value })
+              }
             />
 
             <input
               className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
               type="text"
               placeholder="Apartman"
-              defaultValue={adress.apartment}
-              onChange={(event) => setForm({ apartman: event.target.value })}
+              defaultValue={address.apartment}
+              onChange={(event) => setForm({ apartment: event.target.value })}
             />
 
             <Menu as="div" className="relative inline-block text-left h-10">
@@ -618,8 +626,8 @@ const Home = () => {
                               setReason(_);
                             }}
                             className={classNames(
-                              active ? "bg-zinc-700" : "text-zinc-100",
-                              "block px-4 py-2 text-sm cursor-pointer transition-colors"
+                              active ? 'bg-zinc-700' : 'text-zinc-100',
+                              'block px-4 py-2 text-sm cursor-pointer transition-colors'
                             )}
                           >
                             {_}
@@ -641,12 +649,12 @@ const Home = () => {
               disabled={true}
               placeholder="Orijinal Mesaj"
               onChange={(event) => setForm({ message: event.target.value })}
-              defaultValue={adress.tweet_contents}
+              defaultValue={address.tweet_contents}
             />
 
             <div className="flex items-center gap-x-4">
               <a
-                href={form.location ? form.location : adress.original_address}
+                href={form.location ? form.location : address.original_address}
                 target="_blank"
                 rel="noreferrer"
                 className="h-10 w-10 border border-zinc-700 rounded-lg shadow cursor-pointer hover:opacity-80 bg-zinc-800 hover:bg-zinc-700 transition-colors inline-flex items-center justify-center"
@@ -671,14 +679,14 @@ const Home = () => {
                 required={reason !== reasons[0]}
                 className="flex-1 rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
                 type="text"
-                pattern="^https:\/\/(goo.gl\/maps|maps.google.com)\S+"
+                pattern="^https:\/\/(goo.gl\/maps|maps.google.com|www\.google\.com\/maps)\S+"
                 title="https://goo.gl/maps veya https://maps.google.com ile başlamalıdır."
                 placeholder="Orijinal Lokasyon"
                 onChange={(event) => setForm({ location: event.target.value })}
                 defaultValue={
-                  adress.corrected_address
-                    ? adress.corrected_address
-                    : adress.original_address
+                  address.corrected_address
+                    ? address.corrected_address
+                    : address.original_address
                 }
               />
             </div>
@@ -711,6 +719,9 @@ const Home = () => {
             </div>
           </form>
         )}
+        <div className="mt-8 max-w-2xl mx-auto grid grid-cols-2 gap-x-4">
+          {address && <Map lat={address.loc[0]} lng={address.loc[1]} />}
+        </div>
       </div>
     </div>
   );
