@@ -671,7 +671,7 @@ const Home = () => {
                 required={reason !== reasons[0]}
                 className="flex-1 rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
                 type="text"
-                pattern="^https:\/\/(goo.gl\/maps|maps.google.com)\S+"
+                pattern="^https:\/\/(goo.gl\/maps|maps.google.com|www\.google\.com\/maps)\S+"
                 title="https://goo.gl/maps veya https://maps.google.com ile başlamalıdır."
                 placeholder="Orijinal Lokasyon"
                 onChange={(event) => setForm({ location: event.target.value })}
