@@ -49,7 +49,7 @@ const Home = () => {
   const [time, setTime] = useState(times[0]);
   const [type, setType] = useState(types[0]);
   const [query, setQuery] = useState("");
-  const [adress, setAdress] = useState(null);
+  const [address, setAddress] = useState(null);
   const [reasonError, setReasonError] = useState(false);
   const [reason, setReason] = useState(reasons[0]);
   const [form, setForm] = useReducer(
@@ -59,8 +59,8 @@ const Home = () => {
     {
       message: "",
       location: "",
-      open_adress: "",
-      apartman: "",
+      open_address: "",
+      apartment: "",
       reason: "",
       token: "",
     }
@@ -72,7 +72,7 @@ const Home = () => {
           return locate.toLowerCase().includes(query.toLowerCase());
         });
 
-  const getAdress = () => {
+  const getAddress = () => {
     setLoading(true);
 
     let startingAt = Math.floor(Date.now() / 1000);
@@ -115,7 +115,7 @@ const Home = () => {
         let data = response.data;
 
         if (id) {
-          setAdress(data);
+          setAddress(data);
 
           if (reasons.includes(data.reason)) {
             setReason(data.reason);
@@ -123,7 +123,7 @@ const Home = () => {
         } else {
           setCount(data.count);
 
-          setAdress(data.location);
+          setAddress(data.location);
         }
       })
       .finally(() => {
@@ -134,8 +134,8 @@ const Home = () => {
         setForm({
           message: "",
           location: "",
-          open_adress: "",
-          apartman: "",
+          open_address: "",
+          apartment: "",
           reason: "",
         });
 
@@ -144,7 +144,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getAdress();
+    getAddress();
   }, [location, time]);
 
   return (
@@ -196,11 +196,11 @@ const Home = () => {
           </p>
         )}
 
-        {loading && !adress && id && (
+        {loading && !address && id && (
           <p className="mt-8 text-yellow-400">Adres bilgileri getiriliyor...</p>
         )}
 
-        {loading && !adress && !id && (
+        {loading && !address && !id && (
           <p className="mt-8 text-green-400">
             Filtreye uygun adres aranıyor...
           </p>
@@ -316,13 +316,13 @@ const Home = () => {
           </div>
         )}
 
-        {!loading && !adress && (
+        {!loading && !address && (
           <p className="mt-8 text-red-400">Adres bulunamadı.</p>
         )}
 
-        {adress && !id && (
+        {address && !id && (
           <form
-            key={adress.entry_id}
+            key={address.entry_id}
             onSubmit={(event) => {
               event.preventDefault();
 
@@ -336,13 +336,13 @@ const Home = () => {
               setLoading(true);
 
               let data = {
-                id: adress.entry_id,
-                new_address: form.location,
-                open_address: form.open_adress,
-                apartment: form.apartman,
+                id: address.entry_id,
+                new_address: form.location ? form.location : address.original_location,
+                open_address: form.open_address,
+                apartment: form.apartment,
                 reason: reason,
                 type: types.findIndex((_) => _ === type),
-                tweet_contents: adress.original_message,
+                tweet_contents: address.original_message,
               };
               console.log(data);
               axios
@@ -352,7 +352,7 @@ const Home = () => {
                   },
                 })
                 .finally(() => {
-                  getAdress();
+                  getAddress();
                 });
             }}
             className="mt-4 flex flex-col gap-y-4 mx-auto max-w-2xl"
@@ -363,7 +363,7 @@ const Home = () => {
               type="text"
               placeholder="ID"
               onChange={(event) => setForm({ id: event.target.value })}
-              defaultValue={adress.entry_id}
+              defaultValue={address.entry_id}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -373,7 +373,7 @@ const Home = () => {
                 type="text"
                 placeholder="Enlem"
                 onChange={(event) => setForm({ lat: event.target.value })}
-                defaultValue={adress.loc[0]}
+                defaultValue={address.loc[0]}
               />
 
               <input
@@ -382,7 +382,7 @@ const Home = () => {
                 type="text"
                 placeholder="Boylam"
                 onChange={(event) => setForm({ lng: event.target.value })}
-                defaultValue={adress.loc[1]}
+                defaultValue={address.loc[1]}
               />
             </div>
 
@@ -390,14 +390,14 @@ const Home = () => {
               className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
               type="text"
               placeholder="Açık Adres"
-              onChange={(event) => setForm({ open_adress: event.target.value })}
+              onChange={(event) => setForm({ open_address: event.target.value })}
             />
 
             <input
               className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
               type="text"
               placeholder="Apartman"
-              onChange={(event) => setForm({ apartman: event.target.value })}
+              onChange={(event) => setForm({ apartment: event.target.value })}
             />
             <Menu as="div" className="relative inline-block text-left h-10">
               <Menu.Button className="inline-flex w-full justify-between rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
@@ -451,12 +451,12 @@ const Home = () => {
               disabled={true}
               placeholder="Orijinal Mesaj"
               onChange={(event) => setForm({ message: event.target.value })}
-              defaultValue={adress.original_message}
+              defaultValue={address.original_message}
             />
 
             <div className="flex items-center gap-x-4">
               <a
-                href={form.location ? form.location : adress.original_location}
+                href={form.location ? form.location : address.original_location}
                 target="_blank"
                 rel="noreferrer"
                 className="h-10 w-10 border border-zinc-700 rounded-lg shadow cursor-pointer hover:opacity-80 bg-zinc-800 hover:bg-zinc-700 transition-colors inline-flex items-center justify-center"
@@ -483,8 +483,8 @@ const Home = () => {
                 type="text"
                 placeholder="Orijinal Lokasyon"
                 onChange={(event) => setForm({ location: event.target.value })}
-                defaultValue={adress.original_location}
-                pattern="^https:\/\/(goo.gl\/maps|maps.google.com)\S+"
+                defaultValue={address.original_location}
+                pattern="^https:\/\/(goo.gl\/maps|maps.google.com|www\.google\.com\/maps)\S+"
                 title="https://goo.gl/maps veya https://maps.google.com ile başlamalıdır."
               />
             </div>
@@ -508,9 +508,9 @@ const Home = () => {
           </form>
         )}
 
-        {adress && id && (
+        {address && id && (
           <form
-            key={adress.entry_id}
+            key={address.entry_id}
             onSubmit={(event) => {
               event.preventDefault();
 
@@ -524,13 +524,13 @@ const Home = () => {
               setLoading(true);
 
               let data = {
-                id: adress.entry_id,
-                new_address: form.location,
-                open_address: form.open_adress,
-                apartment: form.apartman,
+                id: address.entry_id,
+                new_address: form.location ? form.location : address.original_location,
+                open_address: form.open_address,
+                apartment: form.apartment,
                 reason: reason,
                 type: types.findIndex((_) => _ === type),
-                tweet_contents: adress.original_message,
+                tweet_contents: address.original_message,
               };
               console.log(data);
               axios
@@ -551,7 +551,7 @@ const Home = () => {
               type="text"
               placeholder="ID"
               onChange={(event) => setForm({ id: event.target.value })}
-              defaultValue={adress.entry_id}
+              defaultValue={address.entry_id}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -560,7 +560,7 @@ const Home = () => {
                 type="text"
                 placeholder="Enlem"
                 onChange={(event) => setForm({ lat: event.target.value })}
-                defaultValue={adress.location[0]}
+                defaultValue={address.location[0]}
               />
 
               <input
@@ -568,7 +568,7 @@ const Home = () => {
                 type="text"
                 placeholder="Boylam"
                 onChange={(event) => setForm({ lng: event.target.value })}
-                defaultValue={adress.location[1]}
+                defaultValue={address.location[1]}
               />
             </div>
 
@@ -577,16 +577,16 @@ const Home = () => {
               className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
               type="text"
               placeholder="Açık Adres"
-              defaultValue={adress.open_address}
-              onChange={(event) => setForm({ open_adress: event.target.value })}
+              defaultValue={address.open_address}
+              onChange={(event) => setForm({ open_address: event.target.value })}
             />
 
             <input
               className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
               type="text"
               placeholder="Apartman"
-              defaultValue={adress.apartment}
-              onChange={(event) => setForm({ apartman: event.target.value })}
+              defaultValue={address.apartment}
+              onChange={(event) => setForm({ apartment: event.target.value })}
             />
 
             <Menu as="div" className="relative inline-block text-left h-10">
@@ -641,12 +641,12 @@ const Home = () => {
               disabled={true}
               placeholder="Orijinal Mesaj"
               onChange={(event) => setForm({ message: event.target.value })}
-              defaultValue={adress.tweet_contents}
+              defaultValue={address.tweet_contents}
             />
 
             <div className="flex items-center gap-x-4">
               <a
-                href={form.location ? form.location : adress.original_address}
+                href={form.location ? form.location : address.original_address}
                 target="_blank"
                 rel="noreferrer"
                 className="h-10 w-10 border border-zinc-700 rounded-lg shadow cursor-pointer hover:opacity-80 bg-zinc-800 hover:bg-zinc-700 transition-colors inline-flex items-center justify-center"
@@ -671,14 +671,14 @@ const Home = () => {
                 required={reason !== reasons[0]}
                 className="flex-1 rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
                 type="text"
-                pattern="^https:\/\/(goo.gl\/maps|maps.google.com)\S+"
+                pattern="^https:\/\/(goo.gl\/maps|maps.google.com|www\.google\.com\/maps)\S+"
                 title="https://goo.gl/maps veya https://maps.google.com ile başlamalıdır."
                 placeholder="Orijinal Lokasyon"
                 onChange={(event) => setForm({ location: event.target.value })}
                 defaultValue={
-                  adress.corrected_address
-                    ? adress.corrected_address
-                    : adress.original_address
+                  address.corrected_address
+                    ? address.corrected_address
+                    : address.original_address
                 }
               />
             </div>
