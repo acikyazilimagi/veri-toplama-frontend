@@ -484,7 +484,7 @@ const Home = () => {
                 placeholder="Orijinal Lokasyon"
                 onChange={(event) => setForm({ location: event.target.value })}
                 defaultValue={adress.original_location}
-                pattern="^https:\/\/(goo.gl\/maps|maps.google.com)\S+"
+                pattern="^https:\/\/(goo.gl\/maps|maps.google.com|www\.google\.com\/maps)\S+"
                 title="https://goo.gl/maps veya https://maps.google.com ile başlamalıdır."
               />
             </div>
