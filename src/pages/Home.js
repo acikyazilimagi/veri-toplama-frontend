@@ -5,8 +5,6 @@ import { Combobox, Menu, Transition } from "@headlessui/react";
 import { useSearchParams } from "react-router-dom";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
-const times = ["Tümü"];
-
 const locations = [
   "Tümü",
   "Hatay - Batı Kuzey",
@@ -46,7 +44,6 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
   const [location, setLocation] = useState(locations[0]);
-  const [time, setTime] = useState(times[0]);
   const [type, setType] = useState(types[0]);
   const [query, setQuery] = useState("");
   const [address, setAddress] = useState(null);
@@ -73,15 +70,6 @@ const Home = () => {
   const getAddress = () => {
     setLoading(true);
 
-    let startingAt = Math.floor(Date.now() / 1000);
-
-    switch (time) {
-      case "Tümü":
-      default:
-        startingAt = 0;
-        break;
-    }
-
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/${
@@ -89,7 +77,7 @@ const Home = () => {
             ? `admin/entries/${id}`
             : `get-location?city_id=${locations.findIndex(
                 (_) => _ === location
-              )}&starting_at=${startingAt}`
+              )}&starting_at=0`
         }`,
         {
           headers: {
@@ -129,7 +117,7 @@ const Home = () => {
 
   useEffect(() => {
     getAddress();
-  }, [location, time]);
+  }, [location]);
 
   return (
     <div className="min-h-full bg-zinc-900 text-zinc-100">
@@ -191,8 +179,7 @@ const Home = () => {
         )}
 
         {!id && (
-          <div className="mt-4 flex flex-col gap-y-4 mx-auto max-w-2xl">
-
+          <div className="mt-4 mx-auto max-w-2xl">
             <Combobox as="div" value={location} onChange={setLocation}>
               <div className="relative">
                 <Combobox.Input
@@ -279,7 +266,9 @@ const Home = () => {
 
               let data = {
                 id: address.entry_id,
-                new_address: form.location ? form.location : address.original_location,
+                new_address: form.location
+                  ? form.location
+                  : address.original_location,
                 reason: reason,
                 type: types.findIndex((_) => _ === type),
                 tweet_contents: address.original_message,
@@ -451,7 +440,9 @@ const Home = () => {
 
               let data = {
                 id: address.entry_id,
-                new_address: form.location ? form.location : address.original_location,
+                new_address: form.location
+                  ? form.location
+                  : address.original_location,
                 reason: reason,
                 type: types.findIndex((_) => _ === type),
                 tweet_contents: address.original_message,
