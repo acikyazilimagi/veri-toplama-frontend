@@ -1,54 +1,52 @@
-import { Fragment, useEffect, useReducer, useState } from 'react';
-import axios from 'axios';
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
-import { Combobox, Menu, Transition } from '@headlessui/react';
-import { useSearchParams } from 'react-router-dom';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { Map } from './Map';
-const times = ['Tümü', '3 saat', '6 saat', '12 saat', '1 gün'];
+import { Fragment, useEffect, useReducer, useState } from "react";
+import axios from "axios";
+import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
+import { Combobox, Menu, Transition } from "@headlessui/react";
+import { useSearchParams } from "react-router-dom";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { Map } from "./Map";
 
 const locations = [
-  'Tümü',
-  'Hatay - Batı Kuzey',
-  'Hatay - Batı Güney',
-  'Hatay - Doğu',
-  'Hatay - Kırıkhan',
-  'Hatay - İskenderun',
-  'Hatay - Samandağ',
-  'Kahramanmaraş',
-  'Gaziantep',
-  'Malatya',
-  'Adıyaman',
+  "Tümü",
+  "Hatay - Batı Kuzey",
+  "Hatay - Batı Güney",
+  "Hatay - Doğu",
+  "Hatay - Kırıkhan",
+  "Hatay - İskenderun",
+  "Hatay - Samandağ",
+  "Kahramanmaraş",
+  "Gaziantep",
+  "Malatya",
+  "Adıyaman",
 ];
 
 const reasons = [
-  'Seçiniz',
-  'Enkaz Yanlış Pin',
-  'Enkaz Dışı Yardımlar',
-  'Hatalı ya da Spam',
-  'Hata Yok',
-  'Duplicate',
-  'Kurtarıldı',
+  "Seçiniz",
+  "Enkaz Yanlış Pin",
+  "Enkaz Dışı Yardımlar",
+  "Hatalı ya da Spam",
+  "Hata Yok",
+  "Duplicate",
+  "Kurtarıldı",
 ];
 
-const types = ['Depremzede', 'Enkaz Yardım'];
+const types = ["Depremzede", "Enkaz Yardım"];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
 const Home = () => {
   const [searchParams] = useSearchParams();
 
-  const token = searchParams.get('token');
-  const id = searchParams.get('id');
+  const token = searchParams.get("token");
+  const id = searchParams.get("id");
 
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
   const [location, setLocation] = useState(locations[0]);
-  const [time, setTime] = useState(times[0]);
   const [type, setType] = useState(types[0]);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [address, setAddress] = useState(null);
   const [reasonError, setReasonError] = useState(false);
   const [reason, setReason] = useState(reasons[0]);
@@ -57,16 +55,14 @@ const Home = () => {
       return { ...prev, ...next };
     },
     {
-      message: '',
-      location: '',
-      open_address: '',
-      apartment: '',
-      reason: '',
-      token: '',
+      message: "",
+      location: "",
+      reason: "",
+      token: "",
     }
   );
   const filteredLocations =
-    query === ''
+    query === ""
       ? locations
       : locations.filter((locate) => {
           return locate.toLowerCase().includes(query.toLowerCase());
@@ -75,27 +71,6 @@ const Home = () => {
   const getAddress = () => {
     setLoading(true);
 
-    let startingAt = Math.floor(Date.now() / 1000);
-
-    switch (time) {
-      case 'Tümü':
-      default:
-        startingAt = 0;
-        break;
-      case '3 saat':
-        startingAt = startingAt - 3 * 3600;
-        break;
-      case '6 saat':
-        startingAt = startingAt - 6 * 3600;
-        break;
-      case '12 saat':
-        startingAt = startingAt - 12 * 3600;
-        break;
-      case '1 gün':
-        startingAt = startingAt - 86400;
-        break;
-    }
-
     axios
       .get(
         `${process.env.REACT_APP_API_URL}/${
@@ -103,11 +78,11 @@ const Home = () => {
             ? `admin/entries/${id}`
             : `get-location?city_id=${locations.findIndex(
                 (_) => _ === location
-              )}&starting_at=${startingAt}`
+              )}&starting_at=0`
         }`,
         {
           headers: {
-            'Auth-Key': token,
+            "Auth-Key": token,
           },
         }
       )
@@ -132,11 +107,9 @@ const Home = () => {
         setReason(reasons[0]);
 
         setForm({
-          message: '',
-          location: '',
-          open_address: '',
-          apartment: '',
-          reason: '',
+          message: "",
+          location: "",
+          reason: "",
         });
 
         setLoading(false);
@@ -145,13 +118,13 @@ const Home = () => {
 
   useEffect(() => {
     getAddress();
-  }, [location, time]);
+  }, [location]);
 
   return (
     <div className="min-h-full bg-zinc-900 text-zinc-100">
       <div
         className={`absolute z-10 h-full bg-zinc-900/60 w-full flex items-center justify-center transition-all ${
-          loading ? 'opacity-100 visible' : 'opacity-0 invisible'
+          loading ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       >
         <svg
@@ -207,50 +180,7 @@ const Home = () => {
         )}
 
         {!id && (
-          <div className="mt-8 max-w-2xl mx-auto grid grid-cols-2 gap-x-4">
-            <Menu as="div" className="relative inline-block text-left h-10">
-              <Menu.Button className="inline-flex w-full justify-between rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                <span>{time}</span>
-
-                <ChevronDownIcon
-                  className="-mr-1 ml-2 h-5 w-5"
-                  aria-hidden="true"
-                />
-              </Menu.Button>
-
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-              >
-                <Menu.Items className="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-lg bg-zinc-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  <div className="py-1">
-                    {times.map((_, index) => (
-                      <Menu.Item key={index}>
-                        {({ active }) => (
-                          <div
-                            onClick={() => {
-                              setTime(_);
-                            }}
-                            className={classNames(
-                              active ? 'bg-zinc-700' : 'text-zinc-100',
-                              'block px-4 py-2 text-sm cursor-pointer transition-colors'
-                            )}
-                          >
-                            {_}
-                          </div>
-                        )}
-                      </Menu.Item>
-                    ))}
-                  </div>
-                </Menu.Items>
-              </Transition>
-            </Menu>
-
+          <div className="mt-4 mx-auto max-w-2xl">
             <Combobox as="div" value={location} onChange={setLocation}>
               <div className="relative">
                 <Combobox.Input
@@ -274,8 +204,8 @@ const Home = () => {
                         value={locate}
                         className={({ active }) =>
                           classNames(
-                            'relative cursor-default select-none py-2 pl-3 pr-9 transition-colors',
-                            active ? 'bg-zinc-800 text-white' : 'text-zinc-100'
+                            "relative cursor-default select-none py-2 pl-3 pr-9 transition-colors",
+                            active ? "bg-zinc-800 text-white" : "text-zinc-100"
                           )
                         }
                       >
@@ -284,8 +214,8 @@ const Home = () => {
                             <div className="flex items-center">
                               <span
                                 className={classNames(
-                                  'ml-3 truncate dark:text-zinc-100',
-                                  selected && 'font-semibold'
+                                  "ml-3 truncate dark:text-zinc-100",
+                                  selected && "font-semibold"
                                 )}
                               >
                                 {locate}
@@ -295,8 +225,8 @@ const Home = () => {
                             {selected && (
                               <span
                                 className={classNames(
-                                  'absolute inset-y-0 right-0 flex items-center pr-2',
-                                  active ? 'text-white' : 'text-brand'
+                                  "absolute inset-y-0 right-0 flex items-center pr-2",
+                                  active ? "text-white" : "text-brand"
                                 )}
                               >
                                 <CheckIcon
@@ -340,8 +270,6 @@ const Home = () => {
                 new_address: form.location
                   ? form.location
                   : address.original_location,
-                open_address: form.open_address,
-                apartment: form.apartment,
                 reason: reason,
                 type: types.findIndex((_) => _ === type),
                 tweet_contents: address.original_message,
@@ -350,7 +278,7 @@ const Home = () => {
               axios
                 .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
                   headers: {
-                    'Auth-Key': form.token,
+                    "Auth-Key": form.token,
                   },
                 })
                 .finally(() => {
@@ -387,22 +315,6 @@ const Home = () => {
                 defaultValue={address.loc[1]}
               />
             </div>
-
-            <input
-              className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
-              type="text"
-              placeholder="Açık Adres"
-              onChange={(event) =>
-                setForm({ open_address: event.target.value })
-              }
-            />
-
-            <input
-              className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
-              type="text"
-              placeholder="Apartman"
-              onChange={(event) => setForm({ apartment: event.target.value })}
-            />
             <Menu as="div" className="relative inline-block text-left h-10">
               <Menu.Button className="inline-flex w-full justify-between rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                 <span>{reason}</span>
@@ -432,8 +344,8 @@ const Home = () => {
                               setReason(_);
                             }}
                             className={classNames(
-                              active ? 'bg-zinc-700' : 'text-zinc-100',
-                              'block px-4 py-2 text-sm cursor-pointer transition-colors'
+                              active ? "bg-zinc-700" : "text-zinc-100",
+                              "block px-4 py-2 text-sm cursor-pointer transition-colors"
                             )}
                           >
                             {_}
@@ -532,8 +444,6 @@ const Home = () => {
                 new_address: form.location
                   ? form.location
                   : address.original_location,
-                open_address: form.open_address,
-                apartment: form.apartment,
                 reason: reason,
                 type: types.findIndex((_) => _ === type),
                 tweet_contents: address.original_message,
@@ -542,11 +452,11 @@ const Home = () => {
               axios
                 .post(`${process.env.REACT_APP_API_URL}/resolve`, data, {
                   headers: {
-                    'Auth-Key': form.token,
+                    "Auth-Key": form.token,
                   },
                 })
                 .finally(() => {
-                  window.location.href = '/dogrula';
+                  window.location.href = "/dogrula";
                 });
             }}
             className="mt-8 flex flex-col gap-y-4 mx-auto max-w-2xl"
@@ -578,25 +488,6 @@ const Home = () => {
               />
             </div>
 
-            <input
-              required={reason !== reasons[0]}
-              className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
-              type="text"
-              placeholder="Açık Adres"
-              defaultValue={address.open_address}
-              onChange={(event) =>
-                setForm({ open_address: event.target.value })
-              }
-            />
-
-            <input
-              className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500"
-              type="text"
-              placeholder="Apartman"
-              defaultValue={address.apartment}
-              onChange={(event) => setForm({ apartment: event.target.value })}
-            />
-
             <Menu as="div" className="relative inline-block text-left h-10">
               <Menu.Button className="inline-flex w-full justify-between rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm font-medium shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                 <span>{reason}</span>
@@ -626,8 +517,8 @@ const Home = () => {
                               setReason(_);
                             }}
                             className={classNames(
-                              active ? 'bg-zinc-700' : 'text-zinc-100',
-                              'block px-4 py-2 text-sm cursor-pointer transition-colors'
+                              active ? "bg-zinc-700" : "text-zinc-100",
+                              "block px-4 py-2 text-sm cursor-pointer transition-colors"
                             )}
                           >
                             {_}
