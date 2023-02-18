@@ -361,6 +361,28 @@ const Home = () => {
             {reasonError && (
               <p className="text-red-400 text-left">Bir sebep seçmelisiniz.</p>
             )}
+            <div className="flex items-center justify-start gap-x-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="#F87171"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p>
+                Bildirim Zamanı:
+                <span className="text-red-400 ml-2">
+                  {new Date(address.epoch * 1000).toLocaleString()}
+                </span>
+              </p>
+            </div>
 
             <textarea
               className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500 h-64 resize-none disabled:opacity-50"
@@ -534,6 +556,28 @@ const Home = () => {
             {reasonError && (
               <p className="text-red-400 text-left">Bir sebep seçmelisiniz.</p>
             )}
+            <div className="flex items-center justify-start gap-x-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="#F87171"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p>
+                Bildirim Zamanı:
+                <span className="text-red-400 ml-2">
+                  {new Date(address.epoch * 1000).toLocaleString()}
+                </span>
+              </p>
+            </div>
 
             <textarea
               className="rounded-lg bg-zinc-900 border-zinc-700 placeholder:text-zinc-500 h-64 resize-none disabled:opacity-50"
