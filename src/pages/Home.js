@@ -59,8 +59,8 @@ const Home = () => {
     {
       message: '',
       location: '',
-      open_adress: '',
-      apartman: '',
+      open_address: '',
+      apartment: '',
       reason: '',
       token: '',
     }
@@ -134,8 +134,8 @@ const Home = () => {
         setForm({
           message: '',
           location: '',
-          open_adress: '',
-          apartman: '',
+          open_address: '',
+          apartment: '',
           reason: '',
         });
 
@@ -719,9 +719,9 @@ const Home = () => {
             </div>
           </form>
         )}
-        <div className="mt-8 max-w-2xl mx-auto grid grid-cols-2 gap-x-4">
-          {address && <Map lat={address.loc[0]} lng={address.loc[1]} />}
-        </div>
+        {/* <div className="mt-8 max-w-2xl mx-auto grid grid-cols-2 gap-x-4"> */}
+        {address && <Map lat={address.loc[0]} lng={address.loc[1]} />}
+        {/* </div> */}
       </div>
     </div>
   );

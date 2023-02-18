@@ -20,8 +20,8 @@ export function Map({ lat, lng }) {
 
   return (
     <MapContainer
+      className="mt-4 max-w-2xl mx-auto"
       style={{
-        width: '670px',
         height: '400px',
       }}
       center={[lat, lng]}
