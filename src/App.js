@@ -11,10 +11,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         {agreed && (
-          <>
-            <Route path="/" element={<Home />} />
-            <Route path="/dogrula" element={<Verify />} />
-          </>
+          <Route path="/" element={<Home />} />
         )}
 
         {!agreed && <Route path="*" element={<Agreement />} />}
